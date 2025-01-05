@@ -1,0 +1,25 @@
+---
+- name: DNF install required packages
+  ansible.builtin.dnf:
+    name: "{{ item }}"
+    state: present
+  tags: install
+  loop:
+    - make
+    - tar
+    - git
+
+- name: Create diretory {{ awx_git_dest }}
+  ansible.builtin.file:
+    path: "{{ awx_git_dest }}"
+    state: directory
+    mode: "0755"
+
+
+- name: Clone AWX repository
+  ansible.builtin.git:
+    repo: "{{ awx_git_repo }}"
+    dest: "{{ awx_git_dest }}"
+    version: "{{ awx_git_version }}"
+    update: true
+  tags: install

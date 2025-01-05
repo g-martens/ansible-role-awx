@@ -1,0 +1,28 @@
+---
+- name: Create diretory {{ awx_git_dest }}
+  ansible.builtin.file:
+    path: "{{ awx_yaml }}"
+    state: directory
+    mode: "0755"
+
+- name: Place PV config
+  ansible.builtin.template:
+    src: "templates/awx-pv.yaml.j2"
+    dest: "{{ awx_yaml }}/awx-pv.yaml"
+    mode: "0644"
+
+- name: Place template configuration
+  ansible.builtin.template:
+    src: "templates/awx-deploy.j2"
+    dest: "{{ awx_yaml }}/awx-deploy.yaml"
+    mode: "0644"
+
+- name: Deploy PV Config
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ awx_yaml }}/awx-pv.yaml"
+
+- name: Deploy PV Config
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ awx_yaml }}/awx-deploy.yaml"

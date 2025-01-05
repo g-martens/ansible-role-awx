@@ -1,0 +1,27 @@
+apiVersion: operator.awx.ansible.com/v1beta1
+kind: AWX
+metadata:
+  name: awx
+  namespace: awx
+spec:
+  tower_ingress_type: none  # Adjust based on your ingress type (e.g., 'nginx', 'none', etc.)
+  postgres_secret: awx-postgres-secret  # Secret containing the external PostgreSQL credentials
+  external_database:
+    hostname: "{{ postgres_host }}"
+    port: 5432
+    user: "{{ database_user }}"
+    password: "{{ database_password }}"
+    database: "{{ database_name }}"
+  tower_admin_user: "{{ tower_admin_user }}"  # Set your desired admin username
+  tower_admin_password: "{{ tower_admin_password }}"  # Set your desired admin password
+  ingress_type: none  # Can be set to 'nginx' if using an ingress controller
+  service_type: nodeport
+  projects_persistence: true
+  projects_storage_access_mode: ReadWriteOnce
+  web_extra_volume_mounts: |
+    - name: static-data
+      mountPath: /var/lib/projects
+  extra_volumes: |
+    - name: static-data
+      persistentVolumeClaim:
+        claimName: public-static-data-pvc

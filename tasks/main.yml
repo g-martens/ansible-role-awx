@@ -1,0 +1,16 @@
+---
+- name: Clone AWX repository
+  ansible.builtin.import_tasks:
+    file: clone_awx.yml
+  tags: clone
+
+- name: Make deploy
+  ansible.builtin.import_tasks:
+    file: makedeploy.yml
+  tags: deploy
+
+- name: Deploy AWX
+  ansible.builtin.import_tasks:
+    file: deploy_awx.yml
+  tags: deploy
+...
