@@ -1,5 +1,5 @@
 ---
-- name: Create diretory {{ awx_git_dest }}
+- name: Create directory {{ awx_git_dest }}
   ansible.builtin.file:
     path: "{{ awx_yaml }}"
     state: directory
@@ -7,7 +7,7 @@
 
 - name: Place PV config
   ansible.builtin.template:
-    src: "templates/awx-pv.yaml.j2"
+    src: "templates/static-pvc.yml.j2"
     dest: "{{ awx_yaml }}/awx-pv.yaml"
     mode: "0644"
 
